@@ -33,61 +33,44 @@ Enemy.prototype.render = function() {
 // Now write your own player class
 // This class requires an update(), render() and
 // a handleInput() method.
- var Player = function() {
+ var Player = function(x,y) {
       this.sprite = 'images/char-boy.png';
-
+      this.x = x;
+      this.y = y;
+      this.speed = 100;
       // set the initial location
-      this.x = 200;
-      this.y = 305;
-
-      this.speed = 3;
+      //this.startPosition();
+      
  };
+
 
 Player.prototype.update = function(dt) {
      this.x = this.x * dt;
      this.y = this.y * dt;
 };
 
-Player.prototype.render = function() {
+
+Player.prototype.render = function(dt) {
   ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
-}
-
-Player.prototype.handleInput = function(allowedKeys){
-    if(allowedKeys == 37 | allowedKeys == 39)
-        this.x = this.x + allowedKeys;
-
-    if(allowedKeys == 38 | allowedKeys == 40)
-        this.x = this.x + allowedKeys;
-}
-
-// if there is a collision, then start the player over
-Player.prototype.startOver = function (){
-
 };
 
-function checkCollisions () {
-  allEnemies.forEach(function(enemy) {
-         if(enemy.x < player.x + 50 &&
-            enemy.x + 70 > player.x &&
-            enemy.y < player.y + 50 &&
-            enemy.y + 70 > player.y) {
-                console.log('collision!');
-                player.startOver();
-            }
-        });
-};
+Player.prototype.handleInput = function(direction){
+    if(direction == 'left')
+        this.x -=100;  
+}
 
 // Now instantiate your objects.
 // Place all enemy objects in an array called allEnemies
 // Place the player object in a variable called player
 var allEnemies = new Array();
 
-debugger;
+
 // Create enemy objects
 for (var i=0; i <= 3; i++)
  allEnemies.push(new Enemy());
 
-var player = new Player();
+var player = new Player(200,400);
+
 
 
 // This listens for key presses and sends the keys to your
@@ -99,6 +82,6 @@ document.addEventListener('keyup', function(e) {
         39: 'right',
         40: 'down'
     };
-
-    player.handleInput(allowedKeys[e.keyCode]);
+    Player.prototype.handleInput(allowedKeys[e]);
+    //player.handleInput(allowedKeys[e.keyCode]);
 });

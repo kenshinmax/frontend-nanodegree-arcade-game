@@ -6,6 +6,13 @@ var Enemy = function() {
     // The image/sprite for our enemies, this uses
     // a helper we've provided to easily load images
     this.sprite = 'images/enemy-bug.png';
+
+    // set initial location
+    this.x = parseInt(Math.random() * 10) + 1
+    this.y = parseInt(Math.random() * 20) + 1;
+
+    // set initial speed
+    this.speed = 3;
 };
 
 // Update the enemy's position, required method for game
@@ -14,6 +21,8 @@ Enemy.prototype.update = function(dt) {
     // You should multiply any movement by the dt parameter
     // which will ensure the game runs at the same speed for
     // all computers.
+    this.x = this.x * dt;
+    this.y = this.y * dt;
 };
 
 // Draw the enemy on the screen, required method for game
@@ -24,12 +33,61 @@ Enemy.prototype.render = function() {
 // Now write your own player class
 // This class requires an update(), render() and
 // a handleInput() method.
+ var Player = function() {
+      this.sprite = 'images/char-boy.png';
 
+      // set the initial location
+      this.x = 200;
+      this.y = 305;
+
+      this.speed = 3;
+ };
+
+Player.prototype.update = function(dt) {
+     this.x = this.x * dt;
+     this.y = this.y * dt;
+};
+
+Player.prototype.render = function() {
+  ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
+}
+
+Player.prototype.handleInput = function(allowedKeys){
+    if(allowedKeys == 37 | allowedKeys == 39)
+        this.x = this.x + allowedKeys;
+
+    if(allowedKeys == 38 | allowedKeys == 40)
+        this.x = this.x + allowedKeys;
+}
+
+// if there is a collision, then start the player over
+Player.prototype.startOver = function (){
+
+};
+
+function checkCollisions () {
+  allEnemies.forEach(function(enemy) {
+         if(enemy.x < player.x + 50 &&
+            enemy.x + 70 > player.x &&
+            enemy.y < player.y + 50 &&
+            enemy.y + 70 > player.y) {
+                console.log('collision!');
+                player.startOver();
+            }
+        });
+};
 
 // Now instantiate your objects.
 // Place all enemy objects in an array called allEnemies
 // Place the player object in a variable called player
+var allEnemies = new Array();
 
+debugger;
+// Create enemy objects
+for (var i=0; i <= 3; i++)
+ allEnemies.push(new Enemy());
+
+var player = new Player();
 
 
 // This listens for key presses and sends the keys to your

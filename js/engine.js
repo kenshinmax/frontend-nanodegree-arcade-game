@@ -80,6 +80,7 @@ var Engine = (function(global) {
      */
     function update(dt) {
         updateEntities(dt);
+        ctx.clearRect(0,0,canvas.width,canvas.height);
         // checkCollisions();
     }
 
@@ -92,7 +93,7 @@ var Engine = (function(global) {
      */
     function updateEntities(dt) {
         allEnemies.forEach(function(enemy) {
-            enemy.update(dt);
+            enemy.update(dt, player);
         });
         player.update();
     }
@@ -150,7 +151,7 @@ var Engine = (function(global) {
         allEnemies.forEach(function(enemy) {
             enemy.render();
         });
-
+        //debugger;
         player.render();
     }
 

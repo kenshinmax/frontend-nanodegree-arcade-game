@@ -1,3 +1,12 @@
+
+// set global variables
+var rightEdge = 505;
+var bottomEdge = 404;
+var tileWidth = 101;
+var tileHeight = 83;
+
+
+
 // Enemies our player must avoid
 var Enemy = function() {
     // Variables applied to each of our instances go here,
@@ -12,17 +21,25 @@ var Enemy = function() {
     this.y = parseInt(Math.random() * 20) + 1;
 
     // set initial speed
-    this.speed = 3;
+    this.speed = Math.floor(Math.random() * 250 + 1);;
 };
 
 // Update the enemy's position, required method for game
 // Parameter: dt, a time delta between ticks
-Enemy.prototype.update = function(dt) {
+Enemy.prototype.update = function(dt, player) {
+
     // You should multiply any movement by the dt parameter
     // which will ensure the game runs at the same speed for
     // all computers.
-    this.x = this.x * dt;
-    this.y = this.y * dt;
+
+    if(this.x < rightEdge) {
+        this.x += dt * this.speed;
+        //console.log(this.x);
+    }
+    else {
+        this.x = 0;
+    }
+    
 };
 
 // Draw the enemy on the screen, required method for game
@@ -30,23 +47,41 @@ Enemy.prototype.render = function() {
     ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
 };
 
+Enemy.prototype.bugReset = function () {
+    for (var i = 0; i < allEnemies.length; i++)
+        allEnemies[i].x = -200;
+}
+
 // Now write your own player class
 // This class requires an update(), render() and
 // a handleInput() method.
  var Player = function(x,y) {
       this.sprite = 'images/char-boy.png';
-      this.x = x;
-      this.y = y;
-      this.speed = 100;
-      // set the initial location
-      //this.startPosition();
       
+      // set the initial location
+       this.x = 202;
+       this.y = 404;
+       this.score = 0;
+       this.lives = 3;
+
  };
 
+function playerInit(){
+      locationX = 202;
+      locationY = 404;
+};
 
-Player.prototype.update = function(dt) {
-     this.x = this.x * dt;
-     this.y = this.y * dt;
+
+Player.prototype.resetPlayer = function(){
+    player.x = 202;
+    player.y = 404;
+};
+
+Player.prototype.update = function() {
+   if (this.collide()) {
+      Enemy.bugReset();
+      this.resetPlayer();
+    }
 };
 
 
@@ -54,9 +89,57 @@ Player.prototype.render = function(dt) {
   ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
 };
 
+Player.prototype.collide = function () {
+    for(var i=0; i < allEnemies.length; i++) {
+        if (this.x < allEnemies[i].x + 50 && this.x + 50 > allEnemies[i].x && this.y < allEnemies[i].y + 30 && this.y + 30 > allEnemies[i].y) {
+            console.log("collide");
+            this.resetPlayer();
+            allEnemies[i].bugReset();
+            break;
+        }    
+    }
+};
+
 Player.prototype.handleInput = function(direction){
-    if(direction == 'left')
-        this.x -=100;  
+    //console.log('dir: ', direction);
+     switch(direction) {
+        case 'left':
+        if(this.x - tileWidth < 0){
+            this.x = 0;
+        }
+        else {
+            this.x -= tileWidth;
+        }
+        break;
+
+        case 'right':
+        if(this.x + tileWidth >= rightEdge){
+            this.x = 404;
+        }
+        else {
+            this.x += tileWidth;
+        }
+        break;
+
+        case 'up':
+        if(this.y - tileHeight < 0){
+            this.y = 0;
+            hasReachedWater = true;
+        }
+        else {
+            this.y -= tileHeight;
+        }
+        break;
+
+        case 'down':
+        if(this.y + tileHeight >= bottomEdge){
+            this.y = 404;
+        }
+        else {
+            this.y += tileHeight;
+        }
+        break;
+    }
 }
 
 // Now instantiate your objects.
@@ -69,7 +152,7 @@ var allEnemies = new Array();
 for (var i=0; i <= 3; i++)
  allEnemies.push(new Enemy());
 
-var player = new Player(200,400);
+var player = new Player();
 
 
 
@@ -82,6 +165,6 @@ document.addEventListener('keyup', function(e) {
         39: 'right',
         40: 'down'
     };
-    Player.prototype.handleInput(allowedKeys[e]);
-    //player.handleInput(allowedKeys[e.keyCode]);
+    //Player.prototype.handleInput(allowedKeys[e]);
+    player.handleInput(allowedKeys[e.keyCode]);
 });

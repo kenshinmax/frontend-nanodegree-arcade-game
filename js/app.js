@@ -4,11 +4,12 @@ var rightEdge = 505;
 var bottomEdge = 404;
 var tileWidth = 101;
 var tileHeight = 83;
-
+var lives = 3;
+var score = 0;
 
 
 // Enemies our player must avoid
-var Enemy = function() {
+var Enemy = function(x,y,speed) {
     // Variables applied to each of our instances go here,
     // we've provided one for you to get started
 
@@ -17,8 +18,8 @@ var Enemy = function() {
     this.sprite = 'images/enemy-bug.png';
 
     // set initial location
-    this.x = parseInt(Math.random() * 10) + 1
-    this.y = parseInt(Math.random() * 20) + 1;
+    this.x = x;
+    this.y = y;
 
     // set initial speed
     this.speed = Math.floor(Math.random() * 250 + 1);;
@@ -39,6 +40,10 @@ Enemy.prototype.update = function(dt, player) {
     else {
         this.x = 0;
     }
+
+    // calulate and update the player score
+
+
     
 };
 
@@ -61,7 +66,6 @@ Enemy.prototype.bugReset = function () {
       // set the initial location
        this.x = 202;
        this.y = 404;
-       this.score = 0;
        this.lives = 3;
 
  };
@@ -75,13 +79,23 @@ function playerInit(){
 Player.prototype.resetPlayer = function(){
     player.x = 202;
     player.y = 404;
+    // update the score
+    score += 10;
 };
 
 Player.prototype.update = function() {
-   if (this.collide()) {
+   if (this.collided()) {
       Enemy.bugReset();
       this.resetPlayer();
     }
+    if(this.y < 25){
+        this.y = 0;
+        this.resetPlayer();
+        // display the score
+        document.getElementById('score').innerHTML =  score;
+    }
+
+    
 };
 
 
@@ -89,13 +103,12 @@ Player.prototype.render = function(dt) {
   ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
 };
 
-Player.prototype.collide = function () {
+Player.prototype.collided = function () {
     for(var i=0; i < allEnemies.length; i++) {
         if (this.x < allEnemies[i].x + 50 && this.x + 50 > allEnemies[i].x && this.y < allEnemies[i].y + 30 && this.y + 30 > allEnemies[i].y) {
             console.log("collide");
             this.resetPlayer();
             allEnemies[i].bugReset();
-            break;
         }    
     }
 };
@@ -149,8 +162,13 @@ var allEnemies = new Array();
 
 
 // Create enemy objects
-for (var i=0; i <= 3; i++)
- allEnemies.push(new Enemy());
+var allEnemies = [];
+(function setEnemies(){
+    allEnemies.push(new Enemy(-2, 60, 50));
+    allEnemies.push(new Enemy(-2, 100, 100));
+    allEnemies.push(new Enemy(-2,150, 150));
+    allEnemies.push(new Enemy(-2,220, 100));
+}());
 
 var player = new Player();
 

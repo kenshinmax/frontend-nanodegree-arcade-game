@@ -4,8 +4,23 @@ var rightEdge = 505;
 var bottomEdge = 404;
 var tileWidth = 101;
 var tileHeight = 83;
-var lives = 3;
-var score = 0;
+
+// Holds the score for each game
+var Game = function(initialScore) {
+    this.score = initialScore;
+    this.lives = 3;
+};
+
+Game.prototype.updateScore = function (gamescore){
+    // score shld not be negative
+    if(this.score<=0 && gamescore<0){
+     // do nothing
+     return;
+
+    }else if(this.score>=0){
+      this.score += gamescore;
+    }
+};
 
 
 // Enemies our player must avoid
@@ -40,11 +55,6 @@ Enemy.prototype.update = function(dt, player) {
     else {
         this.x = 0;
     }
-
-    // calulate and update the player score
-
-
-    
 };
 
 // Draw the enemy on the screen, required method for game
@@ -66,8 +76,6 @@ Enemy.prototype.bugReset = function () {
       // set the initial location
        this.x = 202;
        this.y = 404;
-       this.lives = 3;
-
  };
 
 function playerInit(){
@@ -80,21 +88,24 @@ Player.prototype.resetPlayer = function(){
     player.x = 202;
     player.y = 404;
     // update the score
-    score += 10;
+    
 };
 
 Player.prototype.update = function() {
    if (this.collided()) {
-      Enemy.bugReset();
-      this.resetPlayer();
+      debugger;
+
+     
     }
     if(this.y < 25){
         this.y = 0;
         this.resetPlayer();
+        game.updateScore(10);
         // display the score
-        document.getElementById('score').innerHTML =  score;
+        
     }
 
+    document.getElementById('score').innerHTML =  game.score;
     
 };
 
@@ -109,6 +120,8 @@ Player.prototype.collided = function () {
             console.log("collide");
             this.resetPlayer();
             allEnemies[i].bugReset();
+            game.updateScore(-10);
+            break;
         }    
     }
 };
@@ -172,6 +185,8 @@ var allEnemies = [];
 
 var player = new Player();
 
+// Associate a game for the player
+var game = new Game(0);
 
 
 // This listens for key presses and sends the keys to your

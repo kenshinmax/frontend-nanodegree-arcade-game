@@ -1,6 +1,24 @@
 frontend-nanodegree-arcade-game
 ===============================
 
-Students should use this [rubric](https://www.udacity.com/course/viewer/#!/c-nd001/l-2696458597/m-2687128535) for self-checking their submission.
+Arcade game is a simple game that has a Player and Enemy bugs.  Try to  
+pass the bugs and get to the other side.  Beware, bugs are traveling at 
+random speeds!!
 
-For detailed instructions on how to get started, check out this [guide](https://docs.google.com/document/d/1v01aScPjSWCCWQLIpFqvg3-vXLH2e8_SZQKC8jNO0Dc/pub?embedded=true).
+Here is what you need to get started:
+
+    - download/clone the project
+    - find the index.html file and preview it in a browser
+    - have fun
+
+Features
+--------
+
+- Keeps score
+
+Installation
+------------
+
+Install Arcade game by previewing:
+
+    index.html

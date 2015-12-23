@@ -70,7 +70,7 @@ Enemy.prototype.bugReset = function () {
 // Now write your own player class
 // This class requires an update(), render() and
 // a handleInput() method.
- var Player = function(x,y) {
+var Player = function(x,y) {
       this.sprite = 'images/char-boy.png';
       
       // set the initial location
@@ -85,8 +85,8 @@ function playerInit(){
 
 
 Player.prototype.resetPlayer = function(){
-    player.x = 202;
-    player.y = 404;
+    this.x = 202;
+    this.y = 404;
     // update the score
     
 };

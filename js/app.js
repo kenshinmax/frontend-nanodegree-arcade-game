@@ -37,7 +37,7 @@ var Enemy = function(x,y,speed) {
     this.y = y;
 
     // set initial speed
-    this.speed = Math.floor(Math.random() * 250 + 1);;
+    this.speed = Math.floor(Math.random() * 250 + 1);
 };
 
 // Update the enemy's position, required method for game
@@ -65,7 +65,7 @@ Enemy.prototype.render = function() {
 Enemy.prototype.bugReset = function () {
     for (var i = 0; i < allEnemies.length; i++)
         allEnemies[i].x = -200;
-}
+};
 
 // Now write your own player class
 // This class requires an update(), render() and
@@ -93,9 +93,7 @@ Player.prototype.resetPlayer = function(){
 
 Player.prototype.update = function() {
    if (this.collided()) {
-      debugger;
 
-     
     }
     if(this.y < 25){
         this.y = 0;
@@ -104,8 +102,13 @@ Player.prototype.update = function() {
         // display the score
         
     }
-
-    document.getElementById('score').innerHTML =  game.score;
+    
+    if(game.score ===="undefined"){
+      document.getElementById('score').innerHTML =  0;
+    }else{
+      document.getElementById('score').innerHTML =  game.score;
+    }
+    
     
 };
 
@@ -166,7 +169,7 @@ Player.prototype.handleInput = function(direction){
         }
         break;
     }
-}
+};
 
 // Now instantiate your objects.
 // Place all enemy objects in an array called allEnemies
@@ -176,12 +179,12 @@ var allEnemies = new Array();
 
 // Create enemy objects
 var allEnemies = [];
-(function setEnemies(){
-    allEnemies.push(new Enemy(-2, 60, 50));
-    allEnemies.push(new Enemy(-2, 100, 100));
-    allEnemies.push(new Enemy(-2,150, 150));
-    allEnemies.push(new Enemy(-2,220, 100));
-}());
+   
+   allEnemies.push(new Enemy(-2, 60, 50));
+   allEnemies.push(new Enemy(-2, 100, 100));
+   allEnemies.push(new Enemy(-2,150, 150));
+   allEnemies.push(new Enemy(-2,220, 100));
+
 
 var player = new Player();
 

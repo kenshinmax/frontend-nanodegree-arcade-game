@@ -103,7 +103,7 @@ Player.prototype.update = function() {
         
     }
     
-    if(game.score ===="undefined"){
+    if(typeof  game.score == "undefined"){
       document.getElementById('score').innerHTML =  0;
     }else{
       document.getElementById('score').innerHTML =  game.score;
